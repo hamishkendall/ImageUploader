@@ -1,0 +1,72 @@
+﻿@model FileUploadModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    
+    <div class="upload-container">
+        <form asp-controller="Home" asp-action="Index" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label asp-for="Name">Your Name:</label>
+                <br />
+                <input asp-for="Name" type="text" />
+                <br />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            
+            <br />
+
+            <div class="mb-3">
+                <label asp-for="Files">Select files:</label>
+                <br />
+                <input asp-for="Files" name="Files" type="file" class="form-control" accept="image/*, video/*" multiple />
+                <br />
+                <span asp-validation-for="Files" class="text-danger"></span>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+
+@*     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(function () {
+            $('form').submit(function (e) {
+                e.preventDefault();
+
+                var formData = new FormData($(this)[0]);
+
+                $.ajax({
+                    url: '@Url.Action("Index", "Home")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    xhr: function () {
+                        var xhr = new XMLHttpRequest();
+
+                        xhr.upload.onprogress = function (e) {
+                            if (e.lengthComputable) {
+                                var percent = (e.loaded / e.total) * 100;
+                                // Update the progress bar here
+                                console.log(percent);
+                            }
+                        };
+
+                        return xhr;
+                    },
+                    success: function () {
+                        // Handle success
+                        window.location.href = '@(@Url.Action("UploadSuccess", "Home"))';
+                    },
+                    error: function () {
+                        // Handle error
+                    }
+                });
+            });
+        });
+    </script> *@
+
+</div>

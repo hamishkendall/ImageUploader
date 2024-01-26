@@ -1,0 +1,13 @@
+﻿@model UploadSuccessModel
+@{
+    ViewData["Title"] = "Upload Success!";
+}
+
+<div class="text-center">
+
+    <div class="upload-container">
+        <h3>Thank you @Model.Name for uploading @Model.ImageCount image(s).</h3>
+        <input type="button" value="Go Back" class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("Index", "Home") + "'");" />
+    </div>
+
+</div>
