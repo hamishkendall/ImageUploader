@@ -13,7 +13,7 @@
                 <br />
                 <input asp-for="Name" type="text" />
                 <br />
-                <span id="error-name" asp-validation-for="Name" class="text-danger"></span>
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             
             <br />
@@ -22,28 +22,38 @@
                 <label asp-for="Files">Select files:</label>
                 <br />
                 <input asp-for="Files" name="Files" type="file" class="form-control" accept="image/*, video/*" multiple />
-                <span id="error-files" asp-validation-for="Files" class="text-danger"></span>
-            </div>            
+                <br />
+                <span asp-validation-for="Files" class="text-danger"></span>
+            </div>
+            
             <button type="submit" class="btn btn-primary">Upload</button>
         </form>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
-        let errorName = document.getElementById("error-name");
-        let errorFiles = document.getElementById("error-files");
-
         $(function () {
             $('form').submit(function (e) {
                 e.preventDefault();
 
-                errorName.innerHTML = "";
-                errorFiles.innerHTML = "";
-
                 var formData = new FormData($(this)[0]);
 
-                if (UploadInvalid(formData))
+                var totalFileSize = 0;
+                // Calculate total file size
+                formData.forEach(function (value, key) {
+                    if (value instanceof File) {
+                        totalFileSize += value.size;
+                    }
+                });
+
+                // Set a maximum allowed file size (in bytes)
+                var maxFileSize = 3145728000; // 3GB
+
+                if (totalFileSize > maxFileSize) {
+                    // Display an error message or take appropriate action
+                    alert(`Total file size exceeds the allowed limit.  ${totalFileSize}`);
                     return;
+                }
 
                 $.ajax({
                     url: '@Url.Action("Index", "Home")',
@@ -74,41 +84,6 @@
                 });
             });
         });
-
-        function UploadInvalid(formData) {
-            let isInvalid = false;
-
-            //Check name is not null
-            var nameFieldValue = $('input[name="Name"]').val();
-            if (!nameFieldValue) {
-                errorName.innerHTML = "Please enter a name. FromJS"
-                isInvalid = true;
-            }
-
-            //Check if filesize is too large
-            var totalFileSize = 0;
-            // Calculate total file size
-            formData.forEach(function (value, key) {
-                if (value instanceof File) {
-                    totalFileSize += value.size;
-                }
-            });
-
-            // Set a maximum allowed file size (in bytes)
-            var maxFileSize = 3145728000; // 3GB
-
-            if (totalFileSize == 0) {
-                errorFiles.innerHTML = "Please add some files. FromJS"
-                isInvalid = true;
-            }
-            else if (totalFileSize > maxFileSize) {
-                // Display an error message or take appropriate action
-                errorFiles.innerHTML = "The maximum filesize upload exceeded. FromJS"
-                isInvalid = true;
-            }
-
-            return isInvalid;
-        }
     </script> 
 
 </div>
