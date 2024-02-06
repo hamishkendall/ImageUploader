@@ -7,26 +7,40 @@
 <div class="text-center">
     
     <div class="upload-container">
-        <form asp-controller="Home" asp-action="Index" method="post" enctype="multipart/form-data">
-            <div class="mb-1">
-                <label asp-for="Name">Your Name:</label>
-                <br />
-                <input asp-for="Name" type="text" />
-                <br />
-                <span id="error-name" asp-validation-for="Name" class="text-danger"></span>
+
+        <div id="file-upload-container" style="display: block">
+            <form id="upload-form" asp-controller="Home" asp-action="Index" method="post" enctype="multipart/form-data">
+                <div class="mb-1">
+                    <label asp-for="Name">Your Name</label>
+                    <br />
+                    <input asp-for="Name" type="text" style="background-color: #b7c297; opacity: 0.5;" />
+                    <br />
+                    <span id="error-name" asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-1">
+                    <label asp-for="Files">Select files (Max 3gb at a time)</label>
+                    <br />
+                    <input asp-for="Files" name="Files" type="file" class="form-control" accept="image/*, video/*" multiple />
+                    <span id="error-files" asp-validation-for="Files" class="text-danger"></span>
+                </div>            
+                <button type="submit" class="btn btn-uploader m-1">Upload</button>
+            </form>
+
+
+        </div>
+
+        <div id="file-upload-progress-container" style="display: none">
+            <div id="progress-bar-container" style="position: relative; width: 100%; height: 100%;">
+                <div id="progress-bar" style="width: 0%;">
+                    <p id="progress-percent">0%</p>
+                </div>
             </div>
+        </div>
 
-            <div class="mb-1">
-                <label asp-for="Files">Select files:</label>
-                <br />
-                <input asp-for="Files" name="Files" type="file" class="form-control" accept="image/*, video/*" multiple />
-                <span id="error-files" asp-validation-for="Files" class="text-danger"></span>
-            </div>            
-            <button type="submit" class="btn btn-primary m-1">Upload</button>
-        </form>
-
-        <div id="progress-bar-container" style="width: 100%; background-color:gray">
-            <div id="progress-bar" style="width: 0%; height: 30px; background-color: green;"></div>
+        <div id="file-upload-success-container" style="display: none">
+            <p>Upload complete!</p>
+            <button class="btn btn-uploader" onclick="ShowElement('file-upload-container')">Upload more here</button>
         </div>
 
     </div>
@@ -38,6 +52,10 @@
 
         let progressBar = document.getElementById("progress-bar");
 
+        let uploadForm = document.getElementById("upload-form");
+
+        let progressPercent = document.getElementById("progress-percent");
+
         $(function () {
             $('form').submit(function (e) {
                 e.preventDefault();
@@ -47,11 +65,12 @@
 
                 var formData = new FormData($(this)[0]);
 
-                if (UploadInvalid(formData))
-                    return;
+                if (UploadInvalid(formData)) return;
+
+                ShowElement("file-upload-progress-container");
 
                 $.ajax({
-                    url: '@Url.Action("Index", "Home")',
+                    url: '/',
                     type: 'POST',
                     data: formData,
                     processData: false,
@@ -62,21 +81,22 @@
                         xhr.upload.onprogress = function (e) {
                             if (e.lengthComputable) {
                                 var percent = parseInt((e.loaded / e.total) * 100);
-                                progressBar.style.width = percent + "%";
-                                console.log(percent);
+                                UpdateProgressBar(percent);
                             }
                         };
 
                         return xhr;
                     },
-                    success: function () {
-                        // Handle success
-                        // window.location.href = '@(@Url.Action("UploadSuccess", "Home"))';
+                    success: function (response) {
+                        console.log(response)
+                        ShowElement("file-upload-success-container");
                     },
-                    error: function () {
-                        // Handle error
+                    error: function (error) {
+                        console.warn(error)
                     }
                 });
+
+                uploadForm.reset();
             });
         });
 
@@ -86,7 +106,7 @@
             //Check name is not null
             var nameFieldValue = $('input[name="Name"]').val();
             if (!nameFieldValue) {
-                errorName.innerHTML = "Please enter a name. FromJS"
+                errorName.innerHTML = "Please enter a name"
                 isInvalid = true;
             }
 
@@ -103,12 +123,12 @@
             var maxFileSize = 3145728000; // 3GB
 
             if (totalFileSize == 0) {
-                errorFiles.innerHTML = "Please add some files. FromJS"
+                errorFiles.innerHTML = "Please add some files"
                 isInvalid = true;
             }
             else if (totalFileSize > maxFileSize) {
                 // Display an error message or take appropriate action
-                errorFiles.innerHTML = "The maximum filesize upload exceeded. FromJS"
+                errorFiles.innerHTML = "The maximum filesize upload exceeded"
                 isInvalid = true;
             }
 
@@ -117,6 +137,26 @@
 
         function UpdateProgressBar(percent) {
 
+            if (percent != 100) {
+                progressBar.style.width = percent + "%";
+                progressPercent.innerHTML = percent + "%"
+            }
+            else {
+                progressBar.style.width = percent + "%";
+                progressPercent.innerHTML = "Processing upload..."
+            }
+
+            console.log(percent);
+        }
+
+        function ShowElement(elementId){
+            let element = document.getElementById(elementId);
+
+            document.getElementById("file-upload-container").style.display = "none";
+            document.getElementById("file-upload-progress-container").style.display = "none";
+            document.getElementById("file-upload-success-container").style.display = "none";
+            
+            element.style.display = "block";
         }
     </script> 
 

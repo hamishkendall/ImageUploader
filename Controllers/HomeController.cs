@@ -64,7 +64,7 @@ namespace PhotoUploader.Controllers
                 }                
             }
 
-            return View("UploadSuccess", uploadSuccessModel);
+            return Ok();
         }
     }
 }
