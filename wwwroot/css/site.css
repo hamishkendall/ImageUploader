@@ -18,7 +18,11 @@ body {
     background-size: auto;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-position: 53% 50%;
+    background-position: 53% 57%;
+    
+    font-family: "PT Serif", serif;
+    font-style: normal;
+    font-weight: bold;
 }
 
 @media (min-width: 1921px){
@@ -38,11 +42,27 @@ body {
     background-color: rgba(128,128,128, 0.75);
     border-radius: 10px;
     color: black;
-    font-weight: 500;
     margin: 0;
     position: absolute;
     top: 50%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+}
+
+.btn-uploader {
+    background-color: #B7C297;
+    border-color: #B7C297;
+    color: #000000;
+    font-weight: bold;
+}
+
+#progress-bar-container {
+    width: 100%;
+    background-color: grey
+}
+
+#progress-bar {
+    height: 30px;
+    background-color: #B7C297;
 }
