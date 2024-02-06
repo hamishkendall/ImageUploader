@@ -32,8 +32,8 @@ namespace PhotoUploader.Controllers
         }
 
         [HttpPost]
-        [RequestSizeLimit(3145728000)] // 3GB limit
-        [RequestFormLimits(MultipartBodyLengthLimit = 3145728000)]
+        [RequestSizeLimit(1073741824)] // 1GB limit
+        [RequestFormLimits(MultipartBodyLengthLimit = 1073741824)]
         public async Task<IActionResult> Index(FileUploadModel model){
 
             if (!ModelState.IsValid)
