@@ -44,7 +44,7 @@ body {
     color: black;
     margin: 0;
     position: absolute;
-    top: 50%;
+    top: 75%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
@@ -65,4 +65,16 @@ body {
 #progress-bar {
     height: 30px;
     background-color: #B7C297;
+}
+
+.title {
+    width: 100%;
+    text-align: center;
+}
+
+.title > p {
+    margin: 0;
+    line-height: 1.25;
+    font-size: 20px;
+    font-family: "Dancing Script", cursive;
 }
