@@ -41,17 +41,25 @@
             <button class="btn btn-uploader" onclick="ShowElement('file-upload-container')">Upload more here</button>
         </div>
 
+    <div id="error-message-container" style="display: none">
+        <p class="m-0">Upload error</p>
+        <p id="error-message-text" class="m-0">asdf</p>
+        <button class="btn btn-uploader" onclick="ShowElement('file-upload-container')">Retry</button>
+    </div>
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         let errorName = document.getElementById("error-name");
         let errorFiles = document.getElementById("error-files");
+    let errorUpload = document.getElementById("error-message-container");
 
         let progressBar = document.getElementById("progress-bar");
         let progressPercent = document.getElementById("progress-percent");
 
         let uploadForm = document.getElementById("upload-form");
+
 
         $(function () {
             $('form').submit(function (e) {
@@ -85,11 +93,13 @@
                         return xhr;
                     },
                     success: function (response) {
-                        console.log(response)
+                    console.log(response);
                         ShowElement("file-upload-success-container");
                     },
                     error: function (error) {
-                        console.warn(error)
+                    console.warn(error);
+                    errorUpload.innerHTML = error;
+                    ShowElement("error-message-container");
                     }
                 });
 
@@ -152,6 +162,7 @@
             document.getElementById("file-upload-container").style.display = "none";
             document.getElementById("file-upload-progress-container").style.display = "none";
             document.getElementById("file-upload-success-container").style.display = "none";
+        document.getElementById("error-message-container").style.display = "none";
             
             element.style.display = "block";
         }
