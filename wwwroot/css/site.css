@@ -14,7 +14,7 @@ html {
 }
 
 body {
-    background-image: url(/images/background2.jpg);
+    background-image: url(/images/background.jpg);
     background-size: auto;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -23,16 +23,6 @@ body {
     font-family: "PT Serif", serif;
     font-style: normal;
     font-weight: bold;
-}
-
-@media (min-width: 1921px){
-    body {
-        background-image: url(/images/background.jpg);
-        background-size: 100%;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-position: 50% 50%;
-    }
 }
 
 .upload-container {
